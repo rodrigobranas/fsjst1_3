@@ -3,7 +3,7 @@ import Card from "./Card";
 export default class Column {
 	cards: Card[];
 
-	constructor (readonly name: string, readonly hasEstimative: boolean) {
+	constructor (readonly idColumn: number | null, readonly name: string, readonly hasEstimative: boolean) {
 		this.cards = [];
 	}
 

@@ -1,3 +1,4 @@
+import Card from "../domain/entity/Card";
 import BoardRepository from "../domain/repository/BoardRepository";
 
 export default class ImportCards {
@@ -11,7 +12,7 @@ export default class ImportCards {
 		const lines = input.file.toString().split(/\n/);
 		for (const line of lines.slice(1)) {
 			const [columnName, cardTitle, cardEstimative] = line.split(";");
-			board.addCard(columnName, cardTitle, parseInt(cardEstimative));
+			board.addCard(columnName, new Card(null, cardTitle, parseInt(cardEstimative)));
 		}
 		await this.boardRepository.update(board);
 	}

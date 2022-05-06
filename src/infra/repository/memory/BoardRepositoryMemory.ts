@@ -1,4 +1,5 @@
 import Board from "../../../domain/entity/Board";
+import Column from "../../../domain/entity/Column";
 import BoardRepository from "../../../domain/repository/BoardRepository";
 
 export default class BoardRepositoryMemory implements BoardRepository {
@@ -7,6 +8,10 @@ export default class BoardRepositoryMemory implements BoardRepository {
 
 	constructor () {
 		this.boards = [];
+	}
+	
+	getColumn(idColumn: number): Promise<Column> {
+		throw new Error("Method not implemented.");
 	}
 
 	async save(board: Board): Promise<number> {
@@ -24,6 +29,7 @@ export default class BoardRepositoryMemory implements BoardRepository {
 	}
 
 	async update(board: Board): Promise<void> {
+		if (!board.idBoard) return;
 		await this.delete(board.idBoard);
 		this.save(board);
 	}
@@ -34,7 +40,7 @@ export default class BoardRepositoryMemory implements BoardRepository {
 		this.boards.splice(this.boards.indexOf(existingBoard), 1);
 	}
 
-	async listAll(): Promise<Board[]> {
+	async list(): Promise<Board[]> {
 		return this.boards;
 	}
 }

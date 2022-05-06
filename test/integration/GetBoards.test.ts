@@ -1,7 +1,7 @@
-import fs from "fs/promises";
 import GetBoard from "../../src/application/GetBoard";
-import ImportCards from "../../src/application/ImportCards";
+import GetBoards from "../../src/application/GetBoards";
 import Board from "../../src/domain/entity/Board";
+import Card from "../../src/domain/entity/Card";
 import Column from "../../src/domain/entity/Column";
 import BoardRepository from "../../src/domain/repository/BoardRepository";
 import Connection from "../../src/infra/database/Connection";
@@ -17,31 +17,19 @@ beforeAll(function () {
 	boardRepository = new BoardRepositoryDatabase(connection);
 });
 
-test("Deve importar cards a partir do arquivo no formato .csv", async function () {
-	const file = await fs.readFile("./data/cards.csv");
+test("Deve obter um quadro", async function () {
 	const board = new Board(null, "A");
 	board.addColumn(new Column(null, "todo", true));
 	board.addColumn(new Column(null, "doing", true));
 	board.addColumn(new Column(null, "done", false));
+	board.addCard("todo", new Card(null, "a", 3));
 	const idBoard = await boardRepository.save(board);
-	const importCards = new ImportCards(boardRepository);
-	const input = {
-		idBoard,
-		file
-	};
-	await importCards.execute(input);
-	const getBoard = new GetBoard(boardRepository);
-	const getBoardOutput = await getBoard.execute(idBoard);
-	// const cards = getBoardOutput.cards;
-	// expect(cards[0].title).toBe("a");
-	// expect(cards[0].estimative).toBe(3);
-	// expect(cards[1].title).toBe("b");
-	// expect(cards[1].estimative).toBe(6);
-	// expect(cards[2].title).toBe("c");
-	// expect(cards[2].estimative).toBe(9);
-	// expect(cards[3].title).toBe("d");
-	// expect(cards[3].estimative).toBe(12);
-	await boardRepository.delete(idBoard);
+	const getBoards = new GetBoards(boardRepository);
+	const output = await getBoards.execute();
+	expect(output).toHaveLength(1);
+	if (output[0].idBoard) {
+		await boardRepository.delete(output[0].idBoard);
+	}
 });
 
 afterAll(async function () {

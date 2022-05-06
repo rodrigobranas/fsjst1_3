@@ -3,7 +3,7 @@ import Transition from "./Transition";
 export default class Card {
 	transitions: Transition[];
 
-	constructor (readonly title: string, readonly estimative: number) {
+	constructor (readonly idCard: number | null, readonly title: string, readonly estimative: number) {
 		this.transitions = [];
 	}
 

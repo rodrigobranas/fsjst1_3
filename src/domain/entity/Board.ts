@@ -4,12 +4,12 @@ import Column from "./Column";
 export default class Board {
 	columns: Column[];
 
-	constructor (public idBoard: number, readonly name: string) {
+	constructor (public idBoard: number | null, readonly name: string) {
 		this.columns = [];
 	}
 
-	addColumn (name: string, hasEstimative: boolean) {
-		this.columns.push(new Column(name, hasEstimative));
+	addColumn (column: Column) {
+		this.columns.push(column);
 	}
 
 	getColumn (name: string) {
@@ -18,9 +18,9 @@ export default class Board {
 		return column;
 	}
 
-	addCard (columnName: string, cardTitle: string, estimative: number, date: Date = new Date()) {
+	addCard (columnName: string, card: Card, date: Date = new Date()) {
 		const column = this.getColumn(columnName);
-		column.addCard(new Card(cardTitle, estimative), date);
+		column.addCard(card, date);
 	}
 
 	changeColumn (cardTitle: string, columnNameFrom: string, columnNameTo: string, date: Date = new Date()) {
